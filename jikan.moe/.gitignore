@@ -3,8 +3,3 @@
 .voiden/*
 !.voiden/env-public.yaml
 !.voiden/env-*-public.yaml
-
-# Environment variables
-.env
-.env.*
-*.env*

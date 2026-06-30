@@ -33,7 +33,7 @@ content:
   - type: url
     attrs:
       uid: c9ec9483-a5c8-4481-930e-6386bd525882
-    content: "{{BASE_URL}}/anime"
+    content: "{{API_BASE_URL}}/anime"
 ---
 ```
 ## Query
@@ -1095,7 +1095,7 @@ content:
   - type: url
     attrs:
       uid: 2fd058ea-2663-475d-b7ff-9770b36f3a8e
-    content: "{{BASE_URL}}/anime/{id}/characters"
+    content: "{{API_BASE_URL}}/anime/{id}/characters"
 ---
 ```
 ## Path
@@ -1139,7 +1139,7 @@ content:
           disabled: false
         row:
           - id
-          - null
+          - "1"
 ---
 ```
 ## Response
@@ -1217,7 +1217,7 @@ content:
   - type: url
     attrs:
       uid: 535551b6-598a-4491-ba03-504fc5ebe0a9
-    content: "{{BASE_URL}}/anime/{id}/pictures"
+    content: "{{API_BASE_URL}}/anime/{id}/pictures"
 ---
 ```
 ## Path
@@ -1317,7 +1317,7 @@ content:
   - type: url
     attrs:
       uid: 2adfbbc6-4c93-4593-827d-af1a1251869e
-    content: "{{BASE_URL}}/anime/{id}/statistics"
+    content: "{{API_BASE_URL}}/anime/{id}/statistics"
 ---
 ```
 ## Path
@@ -1421,7 +1421,7 @@ content:
   - type: url
     attrs:
       uid: faf4b4f4-f66b-4264-a2b9-e933423cd6d5
-    content: "{{BASE_URL}}/anime/{id}/relations"
+    content: "{{API_BASE_URL}}/anime/{id}/relations"
 ---
 ```
 ## Path
@@ -1519,7 +1519,7 @@ content:
   - type: url
     attrs:
       uid: 3460ad69-0cf7-4511-b7de-1c241715bd1b
-    content: "{{BASE_URL}}/anime/{id}/recommendations"
+    content: "{{API_BASE_URL}}/anime/{id}/recommendations"
 ---
 ```
 ## Path
