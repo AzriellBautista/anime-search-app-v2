@@ -1,0 +1,83 @@
+import { SimpleGrid, Center, Text, Stack, Group, Skeleton, Card, AspectRatio, Alert } from '@mantine/core';
+import { IconAlertCircle } from '@tabler/icons-react';
+import type { Anime } from '../types/anime';
+import { AnimeCard } from './AnimeCard';
+
+interface AnimeGridProps {
+  data: Anime[];
+  loading: boolean;
+  error: string | null;
+}
+
+function SkeletonCard() {
+  return (
+    <Card shadow="sm" padding="md" radius="md" withBorder>
+      <Card.Section>
+        <AspectRatio ratio={3 / 4}>
+          <Skeleton radius={0} />
+        </AspectRatio>
+      </Card.Section>
+      <Stack gap="xs" mt="md">
+        <Skeleton height={20} width="75%" />
+        <Group gap="xs">
+          <Skeleton height={20} width={48} radius="sm" />
+          <Skeleton height={20} width={36} radius="sm" />
+          <Skeleton height={20} width={56} radius="sm" />
+        </Group>
+        <Stack gap={4}>
+          <Skeleton height={14} />
+          <Skeleton height={14} width="85%" />
+          <Skeleton height={14} width="60%" />
+          <Skeleton height={14} width="40%" />
+        </Stack>
+        <Group gap="xs">
+          <Skeleton height={20} width={60} radius="sm" />
+          <Skeleton height={14} width={50} />
+        </Group>
+      </Stack>
+    </Card>
+  );
+}
+
+export function AnimeGrid({ data, loading, error }: AnimeGridProps) {
+  if (error) {
+    return (
+      <Alert icon={<IconAlertCircle size={16} />} title="Error" color="red" variant="light">
+        {error}
+      </Alert>
+    );
+  }
+
+  if (loading) {
+    return (
+      <SimpleGrid cols={{ base: 1, sm: 2, md: 3, lg: 4 }} spacing="lg">
+        {Array.from({ length: 8 }).map((_, i) => (
+          <SkeletonCard key={i} />
+        ))}
+      </SimpleGrid>
+    );
+  }
+
+  if (data.length === 0) {
+    return (
+      <Center py="xl">
+        <Stack align="center" gap="xs">
+          <Text size="lg" fw={500} c="dimmed">
+            No anime found
+          </Text>
+          <Text size="sm" c="dimmed">
+            Try adjusting your search or filters
+          </Text>
+        </Stack>
+      </Center>
+    );
+  }
+
+  return (
+    <SimpleGrid cols={{ base: 1, sm: 2, md: 3, lg: 4 }} spacing="lg">
+      {data.map((anime) => (
+        <AnimeCard key={anime.mal_id} anime={anime} />
+      ))}
+    </SimpleGrid>
+  );
+}
