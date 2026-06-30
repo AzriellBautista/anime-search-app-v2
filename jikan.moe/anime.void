@@ -11,7 +11,7 @@ generatedAt: 2026-06-30T07:15:43.342Z
 type: request-separator
 attrs:
   uid: d6c13d3d-0e3b-4a9f-b4c5-9c5ef023314d
-  colorIndex: 4
+  colorIndex: 9
   label: Get Anime Search
 ---
 ```
@@ -1065,3 +1065,527 @@ Returns search results for anime
 ### 400
 
 Error: Bad request. When required parameters were not supplied.
+
+%%EMPTY_LINE%%
+
+```void
+---
+type: request-separator
+attrs:
+  uid: 4357a203-c7e9-4be4-92d3-f09b2f90a8e5
+  colorIndex: 0
+  label: Get Anime Characters
+---
+```
+## getAnimeCharacters
+
+```void
+---
+type: request
+attrs:
+  uid: 43e5b3b7-ce8b-4394-8850-68fed4ece741
+content:
+  - type: method
+    attrs:
+      uid: c49c422f-3a2a-4adc-9787-b66ddff48b09
+      method: GET
+      importedFrom: ""
+      visible: true
+    content: GET
+  - type: url
+    attrs:
+      uid: 2fd058ea-2663-475d-b7ff-9770b36f3a8e
+    content: "{{BASE_URL}}/anime/{id}/characters"
+---
+```
+## Path
+
+```void
+---
+type: table
+content:
+  - type: tableRow
+    attrs:
+      disabled: false
+    content:
+      - type: tableCell
+        attrs:
+          colspan: 1
+          rowspan: 1
+          colwidth: null
+        content:
+          - type: paragraph
+            content: id
+      - type: tableCell
+        attrs:
+          colspan: 1
+          rowspan: 1
+          colwidth: null
+        content:
+          - type: paragraph
+            content: integer
+---
+```
+```void
+---
+type: path-table
+attrs:
+  uid: b35a30f1-3880-4ac6-901e-3a9df7696969
+  importedFrom: ""
+content:
+  - type: table
+    rows:
+      - attrs:
+          disabled: false
+        row:
+          - id
+          - null
+---
+```
+## Response
+
+### 200
+
+Returns anime characters resource
+
+```json
+{
+  "data": [
+    {
+      "character": {
+        "mal_id": 0,
+        "url": "string",
+        "images": {
+          "jpg": {
+            "image_url": "string",
+            "small_image_url": "string"
+          },
+          "webp": {
+            "image_url": "string",
+            "small_image_url": "string"
+          }
+        },
+        "name": "string"
+      },
+      "role": "string",
+      "voice_actors": [
+        {
+          "person": {
+            "mal_id": 0,
+            "url": "string",
+            "images": {
+              "jpg": {}
+            },
+            "name": "string"
+          },
+          "language": "string"
+        }
+      ]
+    }
+  ]
+}
+```
+
+### 400
+
+Error: Bad request. When required parameters were not supplied.
+
+```void
+---
+type: request-separator
+attrs:
+  uid: d918a308-3771-4872-bfec-704bbdfed633
+  colorIndex: 6
+  label: Get Anime Pictures
+---
+```
+## getAnimePictures
+
+```void
+---
+type: request
+attrs:
+  uid: 5cfe9954-7361-4d34-8157-d9e80184b26a
+content:
+  - type: method
+    attrs:
+      uid: 71e1e555-062f-4147-b0a3-804cf9e8ab60
+      method: GET
+      importedFrom: ""
+      visible: true
+    content: GET
+  - type: url
+    attrs:
+      uid: 535551b6-598a-4491-ba03-504fc5ebe0a9
+    content: "{{BASE_URL}}/anime/{id}/pictures"
+---
+```
+## Path
+
+```void
+---
+type: table
+content:
+  - type: tableRow
+    attrs:
+      disabled: false
+    content:
+      - type: tableCell
+        attrs:
+          colspan: 1
+          rowspan: 1
+          colwidth: null
+        content:
+          - type: paragraph
+            content: id
+      - type: tableCell
+        attrs:
+          colspan: 1
+          rowspan: 1
+          colwidth: null
+        content:
+          - type: paragraph
+            content: integer
+---
+```
+```void
+---
+type: path-table
+attrs:
+  uid: a337a63d-d18f-405c-8557-e3d8f7641bd9
+  importedFrom: ""
+content:
+  - type: table
+    rows:
+      - attrs:
+          disabled: false
+        row:
+          - id
+          - "1"
+---
+```
+## Responses
+
+### 200
+
+Returns pictures related to the entry
+
+```json
+{
+  "data": [
+    {
+      "images": {
+        "jpg": {
+          "image_url": "string"
+        }
+      }
+    }
+  ]
+}
+```
+
+### 400
+
+Error: Bad request. When required parameters were not supplied.
+
+%%EMPTY_LINE%%
+
+```void
+---
+type: request-separator
+attrs:
+  uid: 21f52328-e73c-4268-898c-6cf3e77e1cf3
+  colorIndex: 1
+  label: Get Anime StatisTics
+---
+```
+## getAnimeStatistics
+
+```void
+---
+type: request
+attrs:
+  uid: 07fd7569-647e-4667-a2ea-ffcae7b540ea
+content:
+  - type: method
+    attrs:
+      uid: 7e30d152-6ce6-4ace-aaa7-7890503dbe9c
+      method: GET
+      importedFrom: ""
+      visible: true
+    content: GET
+  - type: url
+    attrs:
+      uid: 2adfbbc6-4c93-4593-827d-af1a1251869e
+    content: "{{BASE_URL}}/anime/{id}/statistics"
+---
+```
+## Path
+
+```void
+---
+type: table
+content:
+  - type: tableRow
+    attrs:
+      disabled: false
+    content:
+      - type: tableCell
+        attrs:
+          colspan: 1
+          rowspan: 1
+          colwidth: null
+        content:
+          - type: paragraph
+            content: id
+      - type: tableCell
+        attrs:
+          colspan: 1
+          rowspan: 1
+          colwidth: null
+        content:
+          - type: paragraph
+            content: integer
+---
+```
+```void
+---
+type: path-table
+attrs:
+  uid: 23aeed61-dddf-4ed0-8b9b-7308c04d7556
+  importedFrom: ""
+content:
+  - type: table
+    rows:
+      - attrs:
+          disabled: false
+        row:
+          - id
+          - "1"
+---
+```
+## Responses
+
+### 200
+
+Returns anime statistics
+
+```json
+{
+  "data": {
+    "watching": 0,
+    "completed": 0,
+    "on_hold": 0,
+    "dropped": 0,
+    "plan_to_watch": 0,
+    "total": 0,
+    "scores": [
+      {
+        "score": 0,
+        "votes": 0,
+        "percentage": 0.1
+      }
+    ]
+  }
+}
+```
+
+### 400
+
+Error: Bad request. When required parameters were not supplied.
+
+```void
+---
+type: request-separator
+attrs:
+  uid: 58e1abb3-8b28-4575-81a7-b6335019dff5
+  colorIndex: 6
+  label: Get Anime Relations
+---
+```
+## getAnimeRelations
+
+```void
+---
+type: request
+attrs:
+  uid: e5c76354-248c-4860-8a39-c86d44253daf
+content:
+  - type: method
+    attrs:
+      uid: 6e4621ac-23d5-4711-ba32-9a2e3b273807
+      method: GET
+      importedFrom: ""
+      visible: true
+    content: GET
+  - type: url
+    attrs:
+      uid: faf4b4f4-f66b-4264-a2b9-e933423cd6d5
+    content: "{{BASE_URL}}/anime/{id}/relations"
+---
+```
+## Path
+
+```void
+---
+type: table
+content:
+  - type: tableRow
+    attrs:
+      disabled: false
+    content:
+      - type: tableCell
+        attrs:
+          colspan: 1
+          rowspan: 1
+          colwidth: null
+        content:
+          - type: paragraph
+            content: id
+      - type: tableCell
+        attrs:
+          colspan: 1
+          rowspan: 1
+          colwidth: null
+        content:
+          - type: paragraph
+            content: integer
+---
+```
+```void
+---
+type: path-table
+attrs:
+  uid: 596ad839-5eb2-4208-a454-354ef54ee65d
+  importedFrom: ""
+content:
+  - type: table
+    rows:
+      - attrs:
+          disabled: false
+        row:
+          - id
+          - "1"
+---
+```
+## Responses
+
+### 200
+
+Returns anime relations
+
+```json
+{
+  "data": [
+    {
+      "relation": "string",
+      "entry": [
+        {
+          "mal_id": 0,
+          "type": "string",
+          "name": "string",
+          "url": "string"
+        }
+      ]
+    }
+  ]
+}
+```
+
+```void
+---
+type: request-separator
+attrs:
+  uid: 6bbfc0d7-808c-44d1-baa8-7b6e6461eee7
+  colorIndex: 0
+  label: Get Anime Recommendations
+---
+```
+## getAnimeRecommendations
+
+```void
+---
+type: request
+attrs:
+  uid: d0c03434-a2fb-453b-87d3-951e08d63b5c
+content:
+  - type: method
+    attrs:
+      uid: f1f82276-afff-4414-972c-96d16c9898ee
+      method: GET
+      importedFrom: ""
+      visible: true
+    content: GET
+  - type: url
+    attrs:
+      uid: 3460ad69-0cf7-4511-b7de-1c241715bd1b
+    content: "{{BASE_URL}}/anime/{id}/recommendations"
+---
+```
+## Path
+
+```void
+---
+type: table
+content:
+  - type: tableRow
+    attrs:
+      disabled: false
+    content:
+      - type: tableCell
+        attrs:
+          colspan: 1
+          rowspan: 1
+          colwidth: null
+        content:
+          - type: paragraph
+            content: id
+      - type: tableCell
+        attrs:
+          colspan: 1
+          rowspan: 1
+          colwidth: null
+        content:
+          - type: paragraph
+            content: integer
+---
+```
+```void
+---
+type: path-table
+attrs:
+  uid: f9421372-05ea-44dc-9fd1-ba37637e5fc0
+  importedFrom: ""
+content:
+  - type: table
+    rows:
+      - attrs:
+          disabled: false
+        row:
+          - id
+          - "1"
+---
+```
+## Responses
+
+### 200
+
+Returns anime relations
+
+```json
+{
+  "data": [
+    {
+      "relation": "string",
+      "entry": [
+        {
+          "mal_id": 0,
+          "type": "string",
+          "name": "string",
+          "url": "string"
+        }
+      ]
+    }
+  ]
+}
+```

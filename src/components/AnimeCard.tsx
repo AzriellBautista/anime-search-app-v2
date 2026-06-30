@@ -3,9 +3,10 @@ import type { Anime } from '../types/anime';
 
 interface AnimeCardProps {
   anime: Anime;
+  onClick?: () => void;
 }
 
-export function AnimeCard({ anime }: AnimeCardProps) {
+export function AnimeCard({ anime, onClick }: AnimeCardProps) {
   const imageUrl = anime.images?.webp?.large_image_url || anime.images?.jpg?.large_image_url;
   const truncatedSynopsis = anime.synopsis
     ? anime.synopsis.length > 200
@@ -14,7 +15,7 @@ export function AnimeCard({ anime }: AnimeCardProps) {
     : 'No synopsis available.';
 
   return (
-    <Card shadow="sm" padding="md" radius="md" withBorder>
+    <Card shadow="sm" padding="md" radius="md" withBorder onClick={onClick} style={{ cursor: 'pointer' }}>
       <Card.Section>
         <AspectRatio ratio={3 / 4}>
           <Image

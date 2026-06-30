@@ -113,6 +113,94 @@ export interface GenreResponse {
   data: Genre[];
 }
 
+export interface CharacterEntry {
+  mal_id: number;
+  url: string;
+  images: {
+    jpg: { image_url: string; small_image_url?: string };
+    webp?: { image_url: string; small_image_url: string };
+  };
+  name: string;
+}
+
+export interface VoiceActor {
+  person: {
+    mal_id: number;
+    url: string;
+    images: { jpg: { image_url: string } };
+    name: string;
+  };
+  language: string;
+}
+
+export interface AnimeCharacter {
+  character: CharacterEntry;
+  role: string;
+  favorites: number;
+  voice_actors: VoiceActor[];
+}
+
+export interface AnimeCharactersResponse {
+  data: AnimeCharacter[];
+}
+
+export interface AnimePicturesResponse {
+  data: AnimeImages[];
+}
+
+export interface AnimeScore {
+  score: number;
+  votes: number;
+  percentage: number;
+}
+
+export interface AnimeStatistics {
+  watching: number;
+  completed: number;
+  on_hold: number;
+  dropped: number;
+  plan_to_watch: number;
+  total: number;
+  scores: AnimeScore[];
+}
+
+export interface AnimeStatisticsResponse {
+  data: AnimeStatistics;
+}
+
+export interface RelationEntry {
+  mal_id: number;
+  type: string;
+  name: string;
+  url: string;
+}
+
+export interface AnimeRelation {
+  relation: string;
+  entry: RelationEntry[];
+}
+
+export interface AnimeRelationsResponse {
+  data: AnimeRelation[];
+}
+
+export interface RecommendationEntry {
+  mal_id: number;
+  url: string;
+  images: AnimeImages;
+  title: string;
+}
+
+export interface AnimeRecommendation {
+  entry: RecommendationEntry;
+  url: string;
+  votes: number;
+}
+
+export interface AnimeRecommendationsResponse {
+  data: AnimeRecommendation[];
+}
+
 export interface SearchParams {
   q?: string;
   page?: number;

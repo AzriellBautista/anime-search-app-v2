@@ -1,7 +1,9 @@
+import { useState } from 'react';
 import { SimpleGrid, Center, Text, Stack, Group, Skeleton, Card, AspectRatio, Alert } from '@mantine/core';
 import { IconAlertCircle } from '@tabler/icons-react';
 import type { Anime } from '../types/anime';
 import { AnimeCard } from './AnimeCard';
+import { AnimeDetailModal } from './AnimeDetailModal';
 
 interface AnimeGridProps {
   data: Anime[];
@@ -40,26 +42,26 @@ function SkeletonCard() {
 }
 
 export function AnimeGrid({ data, loading, error }: AnimeGridProps) {
+  const [selectedAnime, setSelectedAnime] = useState<Anime | null>(null);
+
+  let content: React.ReactNode;
+
   if (error) {
-    return (
+    content = (
       <Alert icon={<IconAlertCircle size={16} />} title="Error" color="red" variant="light">
         {error}
       </Alert>
     );
-  }
-
-  if (loading) {
-    return (
+  } else if (loading) {
+    content = (
       <SimpleGrid cols={{ base: 1, sm: 2, md: 3, lg: 4 }} spacing="lg">
         {Array.from({ length: 8 }).map((_, i) => (
           <SkeletonCard key={i} />
         ))}
       </SimpleGrid>
     );
-  }
-
-  if (data.length === 0) {
-    return (
+  } else if (data.length === 0) {
+    content = (
       <Center py="xl">
         <Stack align="center" gap="xs">
           <Text size="lg" fw={500} c="dimmed">
@@ -71,13 +73,24 @@ export function AnimeGrid({ data, loading, error }: AnimeGridProps) {
         </Stack>
       </Center>
     );
+  } else {
+    content = (
+      <SimpleGrid cols={{ base: 1, sm: 2, md: 3, lg: 4 }} spacing="lg">
+        {data.map((anime) => (
+          <AnimeCard key={anime.mal_id} anime={anime} onClick={() => setSelectedAnime(anime)} />
+        ))}
+      </SimpleGrid>
+    );
   }
 
   return (
-    <SimpleGrid cols={{ base: 1, sm: 2, md: 3, lg: 4 }} spacing="lg">
-      {data.map((anime) => (
-        <AnimeCard key={anime.mal_id} anime={anime} />
-      ))}
-    </SimpleGrid>
+    <>
+      {content}
+      <AnimeDetailModal
+        opened={selectedAnime !== null}
+        anime={selectedAnime}
+        onClose={() => setSelectedAnime(null)}
+      />
+    </>
   );
 }

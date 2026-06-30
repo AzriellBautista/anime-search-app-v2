@@ -1,5 +1,6 @@
 import '@mantine/core/styles.css';
 import '@mantine/dates/styles.css';
+import '@mantine/charts/styles.css';
 import { MantineProvider, createTheme, Box } from '@mantine/core';
 import { SearchPage } from './pages/SearchPage';
 import { Header } from './components/Header';

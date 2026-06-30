@@ -1,32 +1,39 @@
-# React + TypeScript + Vite
+# Anime Search App
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+A single-page anime search SPA built with React + Mantine UI + Vite, powered by the [Jikan v4 API](https://docs.api.jikan.moe/). Deployed on GitHub Pages.
 
-Currently, two official plugins are available:
+## Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- **Framework**: React 19 + TypeScript
+- **Bundler**: Vite 8
+- **UI Library**: Mantine v9 (`@mantine/core`, `@mantine/hooks`, `@mantine/dates`, `@mantine/charts`)
+- **HTTP Client**: `ky`
+- **Icons**: `@tabler/icons-react`
+- **Charts**: recharts (via `@mantine/charts`)
+- **Dates**: `dayjs`
 
-## React Compiler
+## Features
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- Search anime by title with advanced filters (genre, type, status, rating, score, year, etc.)
+- URL-persisted search state (query, filters, page) — back/forward and refresh preserve results
+- Responsive card grid with skeleton loading states
+- Full-detail modal with tabs: Details, Characters, Pictures, Statistics, Relations, Recommendations
+- Lazy-loaded character, picture, statistics, relations, and recommendation data
+- Dark/light theme toggle (persisted in localStorage)
+- Back-to-top button, keyboard shortcut (Ctrl+K to focus search)
+- Pagination with custom controls
+- Mobile responsive
 
-## Expanding the Oxlint configuration
+## Build & Deploy
 
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
-
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+```bash
+npm install     # install dependencies
+npm run dev     # dev server with HMR
+npm run build   # type-check + production build to dist/
+npm run preview # preview production build locally
+npm run deploy  # deploy to GitHub Pages
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+## Live
+
+[Here](https://azriellbautista.github.io/anime-search-app-v2/)
