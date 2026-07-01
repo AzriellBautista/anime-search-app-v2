@@ -29,7 +29,7 @@ function writeParamsToUrl(params: SearchParams): string {
   url.search = '';
   for (const key of URL_PARAM_KEYS) {
     const val = params[key];
-    if (val !== undefined && val !== null && val !== '' && key !== 'limit') {
+    if (val !== undefined && val !== null && val !== '' && key !== 'limit' && !(key === 'page' && val === 1)) {
       url.searchParams.set(key, String(val));
     }
   }

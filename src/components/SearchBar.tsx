@@ -1,6 +1,6 @@
 import { forwardRef } from 'react';
-import { TextInput } from '@mantine/core';
-import { IconSearch } from '@tabler/icons-react';
+import { TextInput, ActionIcon } from '@mantine/core';
+import { IconSearch, IconX } from '@tabler/icons-react';
 
 interface SearchBarProps {
   value: string;
@@ -24,6 +24,13 @@ export const SearchBar = forwardRef<HTMLInputElement, SearchBarProps>(
         radius="xl"
         enterKeyHint="search"
         leftSection={<IconSearch size={18} />}
+        rightSection={
+          value ? (
+            <ActionIcon variant="subtle" color="gray" size="sm" onClick={() => onChange('')}>
+              <IconX size={14} />
+            </ActionIcon>
+          ) : undefined
+        }
       />
     );
   },

@@ -3,15 +3,24 @@ import {
   Group,
   Stack,
   Select,
-  NumberInput,
   MultiSelect,
   Switch,
   Button,
   Grid,
+  RangeSlider,
+  Input,
 } from '@mantine/core';
 import { DatePickerInput } from '@mantine/dates';
+import dayjs from 'dayjs';
 import { IconSearch, IconRefresh } from '@tabler/icons-react';
 import type { Genre, SearchParams } from '../types/anime';
+import {
+  TYPE_OPTIONS,
+  STATUS_OPTIONS,
+  RATING_OPTIONS,
+  ORDER_BY_OPTIONS,
+  SORT_OPTIONS,
+} from '../constants/filterOptions';
 
 interface AdvancedFiltersProps {
   opened: boolean;
@@ -21,48 +30,6 @@ interface AdvancedFiltersProps {
   onApply: () => void;
   onReset: () => void;
 }
-
-const TYPE_OPTIONS = [
-  { value: 'TV', label: 'TV' },
-  { value: 'OVA', label: 'OVA' },
-  { value: 'Movie', label: 'Movie' },
-  { value: 'Special', label: 'Special' },
-  { value: 'ONA', label: 'ONA' },
-  { value: 'Music', label: 'Music' },
-];
-
-const STATUS_OPTIONS = [
-  { value: 'airing', label: 'Airing' },
-  { value: 'complete', label: 'Complete' },
-  { value: 'upcoming', label: 'Upcoming' },
-];
-
-const RATING_OPTIONS = [
-  { value: 'g', label: 'G - All Ages' },
-  { value: 'pg', label: 'PG - Children' },
-  { value: 'pg13', label: 'PG-13 - Teens 13+' },
-  { value: 'r17', label: 'R - 17+' },
-  { value: 'r', label: 'R+ - Mild Nudity' },
-  { value: 'rx', label: 'Rx - Hentai' },
-];
-
-const ORDER_BY_OPTIONS = [
-  { value: 'mal_id', label: 'MAL ID' },
-  { value: 'title', label: 'Title' },
-  { value: 'start_date', label: 'Start Date' },
-  { value: 'end_date', label: 'End Date' },
-  { value: 'episodes', label: 'Episodes' },
-  { value: 'score', label: 'Score' },
-  { value: 'rank', label: 'Rank' },
-  { value: 'popularity', label: 'Popularity' },
-  { value: 'members', label: 'Members' },
-  { value: 'favorites', label: 'Favorites' },
-];
-
-const SORT_OPTIONS = [
-  { value: 'desc', label: 'Descending' },
-  { value: 'asc', label: 'Ascending' },
-];
 
 export function AdvancedFilters({
   opened,
@@ -111,7 +78,7 @@ export function AdvancedFilters({
               onChange={(v) => onSetFilters({ rating: v || undefined })}
             />
           </Grid.Col>
-          <Grid.Col span={{ base: 12, sm: 6, md: 3 }}>
+          <Grid.Col span={{ base: 12, sm: 6, md: 6 }}>
             <MultiSelect
               label="Genres"
               placeholder="Select genres"
@@ -122,27 +89,28 @@ export function AdvancedFilters({
               onChange={(v) => onSetFilters({ genres: v.length ? v.join(',') : undefined })}
             />
           </Grid.Col>
-          <Grid.Col span={{ base: 12, sm: 6, md: 3 }}>
-            <NumberInput
-              label="Min Score"
-              placeholder="0"
-              min={0}
-              max={10}
-              decimalScale={1}
-              value={filters.min_score ?? ''}
-              onChange={(v) => onSetFilters({ min_score: v === '' ? undefined : Number(v) })}
-            />
-          </Grid.Col>
-          <Grid.Col span={{ base: 12, sm: 6, md: 3 }}>
-            <NumberInput
-              label="Max Score"
-              placeholder="10"
-              min={0}
-              max={10}
-              decimalScale={1}
-              value={filters.max_score ?? ''}
-              onChange={(v) => onSetFilters({ max_score: v === '' ? undefined : Number(v) })}
-            />
+          <Grid.Col span={{ base: 12, sm: 6, md: 6 }}>
+            <Stack gap={4}>
+              <Input.Label>Score Range</Input.Label>
+              <RangeSlider
+                min={0}
+                max={10}
+                step={0.1}
+                precision={1}
+                value={[filters.min_score ?? 0, filters.max_score ?? 10]}
+                onChange={([min, max]) => onSetFilters({ min_score: min > 0 ? min : undefined, max_score: max < 10 ? max : undefined })}
+                label={(val) => val.toFixed(1)}
+                showLabelOnHover={false}
+                marks={[
+                  { value: 0, label: '0' },
+                  { value: 2.5, label: '2.5' },
+                  { value: 5, label: '5' },
+                  { value: 7.5, label: '7.5' },
+                  { value: 10, label: '10' },
+                ]}
+                minRange={0.1}
+              />
+            </Stack>
           </Grid.Col>
           <Grid.Col span={{ base: 12, sm: 6, md: 3 }}>
             <Select
@@ -173,6 +141,7 @@ export function AdvancedFilters({
               clearable
               value={filters.start_date || null}
               onChange={(v) => onSetFilters({ start_date: v || undefined })}
+              maxDate={filters.end_date ? dayjs(filters.end_date).toDate() : undefined}
             />
           </Grid.Col>
           <Grid.Col span={{ base: 12, sm: 6, md: 3 }}>
@@ -182,6 +151,7 @@ export function AdvancedFilters({
               clearable
               value={filters.end_date || null}
               onChange={(v) => onSetFilters({ end_date: v || undefined })}
+              minDate={filters.start_date ? dayjs(filters.start_date).toDate() : undefined}
             />
           </Grid.Col>
           <Grid.Col span={{ base: 12, sm: 6, md: 3 }}>

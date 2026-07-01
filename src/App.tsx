@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import '@mantine/core/styles.css';
 import '@mantine/dates/styles.css';
 import '@mantine/charts/styles.css';
@@ -12,11 +13,13 @@ const theme = createTheme({
 });
 
 export default function App() {
+  const [homeCount, setHomeCount] = useState(0);
+
   return (
     <MantineProvider theme={theme} defaultColorScheme="dark">
       <Box style={{ display: 'flex', flexDirection: 'column', minHeight: '100dvh' }}>
-        <Header />
-        <SearchPage />
+        <Header onHome={() => setHomeCount(c => c + 1)} />
+        <SearchPage homeCount={homeCount} />
         <Footer />
       </Box>
     </MantineProvider>

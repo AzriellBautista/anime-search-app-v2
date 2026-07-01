@@ -8,6 +8,32 @@ interface PaginationBarProps {
 }
 
 export function PaginationBar({ pagination, onPageChange }: PaginationBarProps) {
+  if (!pagination || pagination.last_visible_page <= 1) return null;
+
+  const { current_page, last_visible_page } = pagination;
+
+  return (
+    <Group justify="center" mt="xl">
+      <Pagination
+        total={last_visible_page}
+        value={current_page}
+        onChange={onPageChange}
+        boundaries={0}
+        siblings={3}
+        withEdges
+        withControls
+        getControlProps={(control) => {
+          if ((control === 'first' || control === 'previous') && current_page <= 1) return { style: { display: 'none' } };
+          if ((control === 'last' || control === 'next') && current_page >= last_visible_page) return { style: { display: 'none' } };
+          return {};
+        }}
+        styles={{ dots: { display: 'none' } }}
+      />
+    </Group>
+  );
+}
+
+export function PageInput({ pagination, onPageChange }: PaginationBarProps) {
   const [pageInput, setPageInput] = useState<number | string>(pagination?.current_page ?? 1);
 
   useEffect(() => {
@@ -28,43 +54,23 @@ export function PaginationBar({ pagination, onPageChange }: PaginationBarProps) 
 
   if (!pagination || pagination.last_visible_page <= 1) return null;
 
-  const { current_page, last_visible_page } = pagination;
-
   return (
-    <Group justify="center" mt="xl" gap="xs">
-      <Group gap={4} wrap="nowrap">
-        <Text size="sm">Page</Text>
-        <NumberInput
-          value={pageInput}
-          onChange={setPageInput}
-          onKeyDown={(e) => { if (e.key === 'Enter') handleSubmit(pageInput); }}
-          min={1}
-          max={last_visible_page}
-          allowDecimal={false}
-          allowNegative={false}
-          size="xs"
-          enterKeyHint="go"
-          style={{ width: 55 }}
-          aria-label="Page number"
-        />
-        <Text size="sm" pr="xs">/ {last_visible_page}</Text>
-      </Group>
-
-      <Pagination
-        total={last_visible_page}
-        value={current_page}
-        onChange={onPageChange}
-        boundaries={0}
-        siblings={3}
-        withEdges
-        withControls
-        getControlProps={(control) => {
-          if ((control === 'first' || control === 'previous') && current_page <= 1) return { style: { display: 'none' } };
-          if ((control === 'last' || control === 'next') && current_page >= last_visible_page) return { style: { display: 'none' } };
-          return {};
-        }}
-        styles={{ dots: { display: 'none' } }}
+    <Group gap={4} wrap="nowrap">
+      <Text size="sm">Page</Text>
+      <NumberInput
+        value={pageInput}
+        onChange={setPageInput}
+        onKeyDown={(e) => { if (e.key === 'Enter') handleSubmit(pageInput); }}
+        min={1}
+        max={pagination.last_visible_page}
+        allowDecimal={false}
+        allowNegative={false}
+        size="xs"
+        enterKeyHint="go"
+        style={{ width: 55 }}
+        aria-label="Page number"
       />
+      <Text size="sm" pr="xs">/ {pagination.last_visible_page}</Text>
     </Group>
   );
 }

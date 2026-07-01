@@ -8,7 +8,7 @@ import {
   Button,
   Box,
 } from '@mantine/core';
-import { IconFilter } from '@tabler/icons-react';
+import { IconFilter, IconSearch } from '@tabler/icons-react';
 import type { SearchParams } from '../types/anime';
 import { useAnimeSearch } from '../hooks/useAnimeSearch';
 import { useSearchParams } from '../hooks/useSearchParams';
@@ -16,12 +16,13 @@ import { useGenreList } from '../hooks/useGenreList';
 import { SearchBar } from '../components/SearchBar';
 import { AdvancedFilters } from '../components/AdvancedFilters';
 import { AnimeGrid } from '../components/AnimeGrid';
-import { PaginationBar } from '../components/PaginationBar';
+import { PaginationBar, PageInput } from '../components/PaginationBar';
 import { BackToTop } from '../components/BackToTop';
+import { ActiveFilterPills } from '../components/ActiveFilterPills';
 
-export function SearchPage() {
+export function SearchPage({ homeCount }: { homeCount: number }) {
   const animeSearch = useAnimeSearch();
-  const { data, pagination, loading, error, hasSearched, params, searchVersion, search, setPage } = animeSearch;
+  const { data, pagination, loading, error, hasSearched, params, searchVersion, search, setPage, reset } = animeSearch;
   useSearchParams(animeSearch);
   const { genres } = useGenreList();
   const [filtersOpened, setFiltersOpened] = useState(false);
@@ -48,6 +49,33 @@ export function SearchPage() {
     }
   };
 
+  const handleRemoveFilter = (key: keyof SearchParams, value?: string) => {
+    if (key === 'q') {
+      setQuery('');
+      const merged: SearchParams = { ...draftFilters, page: 1, limit: 25 };
+      search(merged);
+      return;
+    }
+    setDraftFilters((prev) => {
+      if (value && (key === 'genres' || key === 'genres_exclude' || key === 'producers')) {
+        const current = prev[key] as string | undefined;
+        if (!current) return prev;
+        const items = current.split(',').filter((v) => v !== value);
+        const next = { ...prev, [key]: items.length ? items.join(',') : undefined };
+        const merged: SearchParams = { ...next, page: 1, limit: 25 };
+        if (query.trim()) merged.q = query.trim();
+        search(merged);
+        return next;
+      }
+      const next = { ...prev };
+      delete next[key];
+      const merged: SearchParams = { ...next, page: 1, limit: 25 };
+      if (query.trim()) merged.q = query.trim();
+      search(merged);
+      return next;
+    });
+  };
+
   // Sync query + draftFilters from committed params (only on new search, not page change)
   const prevSearchVersion = useRef(0);
   useEffect(() => {
@@ -58,6 +86,14 @@ export function SearchPage() {
     if (q !== undefined) setQuery(q);
     setDraftFilters(filterFields);
   }, [searchVersion, hasSearched]);
+
+  // Home button resets to initial state
+  useEffect(() => {
+    reset();
+    setQuery('');
+    setDraftFilters({});
+    setFiltersOpened(false);
+  }, [homeCount]);
 
   const searchRef = useRef<HTMLInputElement>(null);
 
@@ -120,11 +156,40 @@ export function SearchPage() {
               />
             </Box>
             <Button
+              hiddenFrom="sm"
               variant={filtersOpened ? 'filled' : 'light'}
+              size={isInitial ? 'lg' : 'md'}
+              px="xs"
+              onClick={() => setFiltersOpened((o) => !o)}
+            >
+              <IconFilter size={16} />
+            </Button>
+            <Button
+              visibleFrom="sm"
+              variant={filtersOpened ? 'filled' : 'light'}
+              size={isInitial ? 'lg' : 'md'}
               leftSection={<IconFilter size={16} />}
               onClick={() => setFiltersOpened((o) => !o)}
             >
               Filters
+            </Button>
+            <Button
+              hiddenFrom="sm"
+              variant="light"
+              size={isInitial ? 'lg' : 'md'}
+              px="xs"
+              onClick={() => commitSearch()}
+            >
+              <IconSearch size={16} />
+            </Button>
+            <Button
+              visibleFrom="sm"
+              variant="light"
+              size={isInitial ? 'lg' : 'md'}
+              leftSection={<IconSearch size={16} />}
+              onClick={() => commitSearch()}
+            >
+              Search
             </Button>
           </Group>
 
@@ -138,10 +203,22 @@ export function SearchPage() {
             onReset={handleReset}
           />
 
+          {hasSearched && (
+            <ActiveFilterPills
+              params={params}
+              genres={genres}
+              onRemove={handleRemoveFilter}
+            />
+          )}
+
           {!isInitial && hasSearched && !loading && !error && data.length > 0 && (
-            <Text size="sm" c="dimmed" ta="center">
-              Found {pagination?.items?.total ?? data.length} result{pagination?.items?.total !== 1 ? 's' : ''}
-            </Text>
+            <Group justify="center" align="center" w="100%" gap={6}>
+              <Text size="sm">
+                Found {pagination?.items?.total ?? data.length} result{pagination?.items?.total !== 1 ? 's' : ''}
+              </Text>
+              <Text size="sm">·</Text>
+              <PageInput pagination={pagination} onPageChange={setPage} />
+            </Group>
           )}
         </Stack>
 
