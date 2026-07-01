@@ -46,6 +46,7 @@ export function PaginationBar({ pagination, onPageChange }: PaginationBarProps) 
           allowDecimal={false}
           allowNegative={false}
           size="xs"
+          enterKeyHint="go"
           style={{ width: 55 }}
           aria-label="Page number"
         />

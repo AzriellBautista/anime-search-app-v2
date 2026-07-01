@@ -22,6 +22,7 @@ export const SearchBar = forwardRef<HTMLInputElement, SearchBarProps>(
         placeholder="Search anime..."
         size={size}
         radius="xl"
+        enterKeyHint="search"
         leftSection={<IconSearch size={18} />}
       />
     );
