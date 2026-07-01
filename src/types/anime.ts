@@ -222,3 +222,10 @@ export interface SearchParams {
   end_date?: string;
   unapproved?: boolean;
 }
+
+export interface SavedSearch {
+  id: string;
+  name: string;
+  params: SearchParams;
+  createdAt: number;
+}

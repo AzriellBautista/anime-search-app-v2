@@ -7,18 +7,24 @@ import {
   Group,
   Button,
   Box,
+  Modal,
+  TextInput,
+  Divider,
+  Transition,
 } from '@mantine/core';
 import { IconFilter, IconSearch } from '@tabler/icons-react';
 import type { SearchParams } from '../types/anime';
 import { useAnimeSearch } from '../hooks/useAnimeSearch';
 import { useSearchParams } from '../hooks/useSearchParams';
 import { useGenreList } from '../hooks/useGenreList';
+import { useSavedSearches } from '../hooks/useSavedSearches';
 import { SearchBar } from '../components/SearchBar';
 import { AdvancedFilters } from '../components/AdvancedFilters';
 import { AnimeGrid } from '../components/AnimeGrid';
 import { PaginationBar, PageInput } from '../components/PaginationBar';
 import { BackToTop } from '../components/BackToTop';
 import { ActiveFilterPills } from '../components/ActiveFilterPills';
+import { SavedSearchPills } from '../components/SavedSearchPills';
 
 export function SearchPage({ homeCount }: { homeCount: number }) {
   const animeSearch = useAnimeSearch();
@@ -30,6 +36,25 @@ export function SearchPage({ homeCount }: { homeCount: number }) {
   const [query, setQuery] = useState('');
 
   const isInitial = !hasSearched;
+  const { savedSearches, saveSearch, deleteSearch } = useSavedSearches();
+  const [saveModalOpened, setSaveModalOpened] = useState(false);
+  const [saveName, setSaveName] = useState('');
+  const saveInputRef = useRef<HTMLInputElement>(null);
+
+  const handleOpenSave = () => {
+    setSaveName('');
+    setSaveModalOpened(true);
+    setTimeout(() => saveInputRef.current?.focus(), 100);
+  };
+
+  const handleSave = () => {
+    const name = saveName.trim();
+    if (!name) return;
+    const saved: SearchParams = { ...params };
+    saveSearch(name, saved);
+    setSaveModalOpened(false);
+    setSaveName('');
+  };
 
   const commitSearch = (searchQuery?: string) => {
     const merged: SearchParams = { ...draftFilters, page: 1, limit: 25 };
@@ -132,20 +157,22 @@ export function SearchPage({ homeCount }: { homeCount: number }) {
       <Container size="xl" py={isInitial ? 0 : 'md'}>
 
         <Stack align="center" gap="lg" style={{ width: '100%' }}>
-          {isInitial && (
-            <>
-              <Title order={1} ta="center" style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)' }}>
-                Anime Search
-              </Title>
-              <Text c="dimmed" ta="center" size="lg" maw={500}>
-                Discover anime from MyAnimeList — search by title, filter by genre,
-                rating, and more.
-              </Text>
-            </>
-          )}
+          <Transition mounted={isInitial} transition="fade" duration={300} keepMounted>
+            {(styles) => (
+              <Box style={{ ...styles, pointerEvents: isInitial ? undefined : 'none' }}>
+                <Title order={1} ta="center" style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)' }}>
+                  Anime Search
+                </Title>
+                <Text c="dimmed" ta="center" size="lg" maw={500}>
+                  Discover anime from MyAnimeList — search by title, filter by genre,
+                  rating, and more.
+                </Text>
+              </Box>
+            )}
+          </Transition>
 
-          {/* Search bar + Filters toggle — always visible */}
-          <Group gap="xs" mb="xs" justify="center" wrap="nowrap">
+          {/* Search bar + Filters toggle + Search button */}
+          <Group gap="xs" justify="center" wrap="nowrap">
             <Box style={{ width: 'min(400px, 60vw)' }}>
               <SearchBar
                 ref={searchRef}
@@ -193,7 +220,7 @@ export function SearchPage({ homeCount }: { homeCount: number }) {
             </Button>
           </Group>
 
-          {/* Filters panel — always visible (collapsed by default) */}
+          {/* Filters panel */}
           <AdvancedFilters
             opened={filtersOpened}
             genres={genres}
@@ -203,36 +230,84 @@ export function SearchPage({ homeCount }: { homeCount: number }) {
             onReset={handleReset}
           />
 
-          {hasSearched && (
-            <ActiveFilterPills
-              params={params}
-              genres={genres}
-              onRemove={handleRemoveFilter}
-            />
-          )}
+          {/* Saved searches */}
+          <SavedSearchPills
+            savedSearches={savedSearches}
+            onApply={(p) => search({ ...p, page: 1, limit: 25 })}
+            onDelete={deleteSearch}
+          />
 
-          {!isInitial && hasSearched && !loading && !error && data.length > 0 && (
-            <Group justify="center" align="center" w="100%" gap={6}>
-              <Text size="sm">
-                Found {pagination?.items?.total ?? data.length} result{pagination?.items?.total !== 1 ? 's' : ''}
-              </Text>
-              <Text size="sm">·</Text>
-              <PageInput pagination={pagination} onPageChange={setPage} />
-            </Group>
+          {/* Save current search link */}
+          {!isInitial && (
+            <Text size="sm" c="blue" style={{ cursor: 'pointer' }} onClick={handleOpenSave}>
+              ★ Save
+            </Text>
           )}
         </Stack>
 
-        {/* Results */}
-        {!isInitial && (
-          <>
-            <Box mt="md">
-              <AnimeGrid data={data} loading={loading} error={error} />
+        <Transition mounted={!isInitial} transition="slide-up" duration={300} keepMounted>
+          {(styles) => (
+            <Box style={{ ...styles, width: '100%', pointerEvents: !isInitial ? undefined : 'none' }}>
+              <Divider w="100%" my="md" />
+
+              <Stack align="center" gap="lg" mt="md" style={{ width: '100%' }}>
+                {hasSearched && (
+                  <ActiveFilterPills
+                    params={params}
+                    genres={genres}
+                    onRemove={handleRemoveFilter}
+                  />
+                )}
+
+                {!isInitial && hasSearched && !loading && !error && data.length > 0 && (
+                  <Group justify="center" align="center" w="100%" gap={6}>
+                    <Text size="sm">
+                      Found {pagination?.items?.total ?? data.length} result{pagination?.items?.total !== 1 ? 's' : ''}
+                    </Text>
+                    {pagination && pagination.last_visible_page > 1 && (
+                      <>
+                        <Text size="sm">·</Text>
+                        <PageInput pagination={pagination} onPageChange={setPage} />
+                      </>
+                    )}
+                  </Group>
+                )}
+              </Stack>
+
+              {!isInitial && (
+                <>
+                  <Box mt="md">
+                    <AnimeGrid data={data} loading={loading} error={error} />
+                  </Box>
+                  <PaginationBar pagination={pagination} onPageChange={setPage} />
+                </>
+              )}
             </Box>
-            <PaginationBar pagination={pagination} onPageChange={setPage} />
-          </>
-        )}
+          )}
+        </Transition>
       </Container>
       <BackToTop />
+
+      <Modal
+        opened={saveModalOpened}
+        onClose={() => setSaveModalOpened(false)}
+        title="Save Current Search"
+        size="sm"
+      >
+        <TextInput
+          ref={saveInputRef}
+          label="Name"
+          placeholder="e.g. My Favorites"
+          value={saveName}
+          onChange={(e) => setSaveName(e.currentTarget.value)}
+          onKeyDown={(e) => { if (e.key === 'Enter') handleSave(); }}
+          data-autofocus
+        />
+        <Group justify="flex-end" mt="md">
+          <Button variant="subtle" onClick={() => setSaveModalOpened(false)}>Cancel</Button>
+          <Button onClick={handleSave} disabled={!saveName.trim()}>Save</Button>
+        </Group>
+      </Modal>
     </Box>
   );
 }
