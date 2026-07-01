@@ -1,6 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Group, ActionIcon, Text, NumberInput, Pagination } from '@mantine/core';
-import { IconChevronsLeft, IconChevronLeft, IconChevronRight, IconChevronsRight } from '@tabler/icons-react';
+import { Group, Text, NumberInput, Pagination } from '@mantine/core';
 import type { Pagination as PaginationType } from '../types/anime';
 
 interface PaginationBarProps {
@@ -30,8 +29,6 @@ export function PaginationBar({ pagination, onPageChange }: PaginationBarProps) 
   if (!pagination || pagination.last_visible_page <= 1) return null;
 
   const { current_page, last_visible_page } = pagination;
-  const isFirst = current_page <= 1;
-  const isLast = current_page >= last_visible_page;
 
   return (
     <Group justify="center" mt="xl" gap="xs">
@@ -53,35 +50,21 @@ export function PaginationBar({ pagination, onPageChange }: PaginationBarProps) 
         <Text size="sm" pr="xs">/ {last_visible_page}</Text>
       </Group>
 
-      {!isFirst && (
-        <>
-          <ActionIcon variant="subtle" onClick={() => onPageChange(1)}>
-            <IconChevronsLeft size={16} />
-          </ActionIcon>
-          <ActionIcon variant="subtle" onClick={() => onPageChange(current_page - 1)}>
-            <IconChevronLeft size={16} />
-          </ActionIcon>
-        </>
-      )}
-
       <Pagination
         total={last_visible_page}
         value={current_page}
         onChange={onPageChange}
-        withEdges={false}
-        withControls={false}
+        boundaries={0}
+        siblings={3}
+        withEdges
+        withControls
+        getControlProps={(control) => {
+          if ((control === 'first' || control === 'previous') && current_page <= 1) return { style: { display: 'none' } };
+          if ((control === 'last' || control === 'next') && current_page >= last_visible_page) return { style: { display: 'none' } };
+          return {};
+        }}
+        styles={{ dots: { display: 'none' } }}
       />
-
-      {!isLast && (
-        <>
-          <ActionIcon variant="subtle" onClick={() => onPageChange(current_page + 1)}>
-            <IconChevronRight size={16} />
-          </ActionIcon>
-          <ActionIcon variant="subtle" onClick={() => onPageChange(last_visible_page)}>
-            <IconChevronsRight size={16} />
-          </ActionIcon>
-        </>
-      )}
     </Group>
   );
 }
