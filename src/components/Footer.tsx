@@ -7,8 +7,8 @@ export function Footer() {
         <Group justify="center" py="md">
           <Text size="sm" c="dimmed">
             Powered by{' '}
-            <Anchor href="https://jikan.moe" target="_blank" rel="noopener noreferrer" size="sm" c="dimmed">
-              Jikan API
+            <Anchor href="https://tenrai.org" target="_blank" rel="noopener noreferrer" size="sm" c="dimmed">
+              Tenrai API
             </Anchor>
             {' '}&mdash; Data from MyAnimeList
           </Text>

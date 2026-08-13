@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import type { Genre } from '../types/anime';
-import { fetchGenres } from '../services/jikan';
+import { fetchGenres } from '../services/tenrai';
 
 const CACHE_KEY = 'anime-search-genres';
 const CACHE_TTL = 86400000; // 24 hours

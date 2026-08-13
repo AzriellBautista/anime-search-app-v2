@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { SimpleGrid, Card, Image, Text, Badge, Group, AspectRatio, Skeleton, Alert } from '@mantine/core';
 import { IconAlertCircle } from '@tabler/icons-react';
-import { fetchAnimeCharacters } from '../services/jikan';
+import { fetchAnimeCharacters } from '../services/tenrai';
 import type { AnimeCharacter } from '../types/anime';
 
 interface AnimeCharactersTabProps {

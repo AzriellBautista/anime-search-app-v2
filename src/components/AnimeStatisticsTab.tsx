@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { SimpleGrid, Text, Stack, Skeleton, Alert } from '@mantine/core';
 import { BarChart, DonutChart } from '@mantine/charts';
 import { IconAlertCircle } from '@tabler/icons-react';
-import { fetchAnimeStatistics } from '../services/jikan';
+import { fetchAnimeStatistics } from '../services/tenrai';
 import type { AnimeStatistics } from '../types/anime';
 
 interface AnimeStatisticsTabProps {

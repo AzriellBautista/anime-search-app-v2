@@ -1,6 +1,6 @@
 # Anime Search App
 
-A single-page anime search SPA built with React + Mantine UI + Vite, powered by the [Jikan v4 API](https://docs.api.jikan.moe/). Deployed on GitHub Pages.
+A single-page anime search SPA built with React + Mantine UI + Vite, powered by the [Tenrai API](https://tenrai.org/). Deployed on GitHub Pages.
 
 ## Stack
 

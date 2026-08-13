@@ -1,6 +1,6 @@
 import { useState, useCallback, useRef } from 'react';
 import type { Anime, Pagination, SearchParams } from '../types/anime';
-import { fetchAnime } from '../services/jikan';
+import { fetchAnime } from '../services/tenrai';
 
 const DEFAULT_PARAMS: SearchParams = {
   page: 1,

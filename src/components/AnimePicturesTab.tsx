@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { SimpleGrid, Image, AspectRatio, Skeleton, Alert } from '@mantine/core';
 import { IconAlertCircle } from '@tabler/icons-react';
-import { fetchAnimePictures } from '../services/jikan';
+import { fetchAnimePictures } from '../services/tenrai';
 import type { AnimeImages } from '../types/anime';
 
 interface AnimePicturesTabProps {

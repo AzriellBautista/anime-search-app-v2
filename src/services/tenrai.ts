@@ -1,8 +1,10 @@
 import ky from 'ky';
 import type { AnimeResponse, GenreResponse, SearchParams, AnimeCharactersResponse, AnimePicturesResponse, AnimeStatisticsResponse, AnimeRelationsResponse, AnimeRecommendationsResponse } from '../types/anime';
 
+const API_BASE_URL = 'https://api.tenrai.org/v1';
+
 const api = ky.create({
-  prefix: 'https://api.jikan.moe/v4',
+  prefix: API_BASE_URL,
   timeout: 10000,
   retry: 1,
 });

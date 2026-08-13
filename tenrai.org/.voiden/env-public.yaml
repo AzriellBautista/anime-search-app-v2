@@ -1,4 +1,4 @@
 dev:
   variables:
-    API_BASE_URL: "https://api.jikan.moe/v4"
+    API_BASE_URL: "https://api.tenrai.org/v1"
   displayName: "For API dev testing."

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { SimpleGrid, Card, Image, Text, Badge, Stack, AspectRatio, Skeleton, Anchor, Alert } from '@mantine/core';
 import { IconAlertCircle } from '@tabler/icons-react';
-import { fetchAnimeRecommendations } from '../services/jikan';
+import { fetchAnimeRecommendations } from '../services/tenrai';
 import type { AnimeRecommendation } from '../types/anime';
 
 interface AnimeRecommendationsTabProps {

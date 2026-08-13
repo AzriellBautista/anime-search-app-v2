@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Stack, Text, Badge, Anchor, Divider, Skeleton, Alert, Group } from '@mantine/core';
 import { IconAlertCircle } from '@tabler/icons-react';
-import { fetchAnimeRelations } from '../services/jikan';
+import { fetchAnimeRelations } from '../services/tenrai';
 import type { AnimeRelation } from '../types/anime';
 
 interface AnimeRelationsTabProps {
