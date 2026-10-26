@@ -92,15 +92,27 @@ export function AnimeRelationsTab({ animeId }: AnimeRelationsTabProps) {
                 >
                   {entry.type}
                 </Badge>
-                <Anchor
-                  href={entry.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  size="sm"
-                  lineClamp={1}
-                >
-                  {entry.name}
-                </Anchor>
+                {entry.type === 'anime' ? (
+                  <Anchor
+                    component="button"
+                    type="button"
+                    size="sm"
+                    lineClamp={1}
+                    onClick={() => { window.location.hash = String(entry.mal_id); }}
+                  >
+                    {entry.name}
+                  </Anchor>
+                ) : (
+                  <Anchor
+                    href={entry.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    size="sm"
+                    lineClamp={1}
+                  >
+                    {entry.name}
+                  </Anchor>
+                )}
               </Group>
             ))}
           </Stack>

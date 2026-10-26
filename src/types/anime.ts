@@ -229,3 +229,8 @@ export interface SavedSearch {
   params: SearchParams;
   createdAt: number;
 }
+
+export interface AnimeSingleResponse {
+  data: Anime;
+}
+

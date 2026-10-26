@@ -1,5 +1,5 @@
 import ky from 'ky';
-import type { AnimeResponse, GenreResponse, SearchParams, AnimeCharactersResponse, AnimePicturesResponse, AnimeStatisticsResponse, AnimeRelationsResponse, AnimeRecommendationsResponse } from '../types/anime';
+import type { AnimeResponse, AnimeSingleResponse, GenreResponse, SearchParams, AnimeCharactersResponse, AnimePicturesResponse, AnimeStatisticsResponse, AnimeRelationsResponse, AnimeRecommendationsResponse } from '../types/anime';
 
 const API_BASE_URL = 'https://api.tenrai.org/v1';
 
@@ -21,6 +21,16 @@ export async function fetchAnime(params: SearchParams): Promise<AnimeResponse> {
 
 export async function fetchGenres(): Promise<GenreResponse> {
   return api.get('genres/anime').json<GenreResponse>();
+}
+
+const animeByIdCache = new Map<number, AnimeSingleResponse>();
+
+export async function fetchAnimeById(id: number): Promise<AnimeSingleResponse> {
+  const cached = animeByIdCache.get(id);
+  if (cached) return cached;
+  const res = await api.get(`anime/${id}`).json<AnimeSingleResponse>();
+  animeByIdCache.set(id, res);
+  return res;
 }
 
 export async function fetchAnimeCharacters(id: number): Promise<AnimeCharactersResponse> {

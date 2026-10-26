@@ -13,14 +13,17 @@ import {
   Transition,
 } from '@mantine/core';
 import { IconFilter, IconSearch } from '@tabler/icons-react';
-import type { SearchParams } from '../types/anime';
+import type { SearchParams, Anime } from '../types/anime';
 import { useAnimeSearch } from '../hooks/useAnimeSearch';
 import { useSearchParams } from '../hooks/useSearchParams';
 import { useGenreList } from '../hooks/useGenreList';
 import { useSavedSearches } from '../hooks/useSavedSearches';
 import { SearchBar } from '../components/SearchBar';
 import { AdvancedFilters } from '../components/AdvancedFilters';
+import { Alert } from '@mantine/core';
 import { AnimeGrid } from '../components/AnimeGrid';
+import { AnimeDetailModal } from '../components/AnimeDetailModal';
+import { fetchAnimeById } from '../services/tenrai';
 import { PaginationBar, PageInput } from '../components/PaginationBar';
 import { BackToTop } from '../components/BackToTop';
 import { ActiveFilterPills } from '../components/ActiveFilterPills';
@@ -32,6 +35,8 @@ export function SearchPage({ homeCount }: { homeCount: number }) {
   useSearchParams(animeSearch);
   const { genres } = useGenreList();
   const [filtersOpened, setFiltersOpened] = useState(false);
+  const [hashAnime, setHashAnime] = useState<Anime | null>(null);
+  const [hashError, setHashError] = useState<string | null>(null);
   const [draftFilters, setDraftFilters] = useState<SearchParams>({});
   const [query, setQuery] = useState('');
 
@@ -132,6 +137,28 @@ export function SearchPage({ homeCount }: { homeCount: number }) {
     };
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
+  }, []);
+
+  // Open anime detail modal from URL hash (#mal_id), works even on initial load
+  useEffect(() => {
+    const readHash = () => {
+      const raw = window.location.hash.replace('#', '').trim();
+      if (!raw) { setHashError(null); setHashAnime(null); return; }
+      const id = Number(raw);
+      if (Number.isNaN(id) || id <= 0) {
+        setHashError(`Invalid anime id in URL: "${raw}"`);
+        setHashAnime(null);
+        return;
+      }
+      setHashError(null);
+      fetchAnimeById(id).then((res) => setHashAnime(res.data)).catch(() => {
+        setHashAnime(null);
+        setHashError(`Could not load anime #${id}.`);
+      });
+    };
+    readHash();
+    window.addEventListener('hashchange', readHash);
+    return () => window.removeEventListener('hashchange', readHash);
   }, []);
 
   // Scroll to top on page change or new search
@@ -286,7 +313,22 @@ export function SearchPage({ homeCount }: { homeCount: number }) {
           )}
         </Transition>
       </Container>
+      {hashError && (
+        <Alert color="red" title="Error" withCloseButton onClose={() => setHashError(null)} style={{ position: 'fixed', top: 80, left: '50%', transform: 'translateX(-50%)', zIndex: 1000, maxWidth: 420 }}>
+          {hashError}
+        </Alert>
+      )}
       <BackToTop />
+      <AnimeDetailModal
+        opened={hashAnime !== null}
+        anime={hashAnime}
+        onClose={() => {
+          if (window.location.hash) {
+            history.replaceState(null, '', window.location.pathname + window.location.search);
+          }
+          setHashAnime(null);
+        }}
+      />
 
       <Modal
         opened={saveModalOpened}

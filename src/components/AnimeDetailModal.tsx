@@ -165,7 +165,7 @@ export function AnimeDetailModal({ opened, anime, onClose }: AnimeDetailModalPro
         </Grid.Col>
       </Grid>
 
-      <Tabs defaultValue="details" onChange={(value) => { if (value === 'characters') setCharactersOpened(true); if (value === 'pictures') setPicturesOpened(true); if (value === 'statistics') setStatisticsOpened(true); if (value === 'relations') setRelationsOpened(true); if (value === 'recommendations') setRecommendationsOpened(true); }} px="md" pb="md">
+      <Tabs key={anime?.mal_id} defaultValue="details" onChange={(value) => { if (value === 'characters') setCharactersOpened(true); if (value === 'pictures') setPicturesOpened(true); if (value === 'statistics') setStatisticsOpened(true); if (value === 'relations') setRelationsOpened(true); if (value === 'recommendations') setRecommendationsOpened(true); }} px="md" pb="md">
         <Tabs.List>
           <Tabs.Tab value="details">Details</Tabs.Tab>
           <Tabs.Tab value="characters">Characters</Tabs.Tab>

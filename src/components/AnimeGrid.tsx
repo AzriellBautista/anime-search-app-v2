@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { SimpleGrid, Center, Text, Stack, Group, Skeleton, Card, AspectRatio, Alert } from '@mantine/core';
 import { IconAlertCircle } from '@tabler/icons-react';
 import type { Anime } from '../types/anime';
 import { AnimeCard } from './AnimeCard';
 import { AnimeDetailModal } from './AnimeDetailModal';
+import { fetchAnimeById } from '../services/tenrai';
 
 interface AnimeGridProps {
   data: Anime[];
@@ -43,6 +44,45 @@ function SkeletonCard() {
 
 export function AnimeGrid({ data, loading, error }: AnimeGridProps) {
   const [selectedAnime, setSelectedAnime] = useState<Anime | null>(null);
+  const [hashAnime, setHashAnime] = useState<Anime | null>(null);
+  const [hashLoading, setHashLoading] = useState(false);
+
+  const readHash = () => {
+    const raw = window.location.hash.replace('#', '').trim();
+    const id = Number(raw);
+    if (!raw || Number.isNaN(id)) {
+      setHashAnime(null);
+      return;
+    }
+    // Switching to a hash-driven anime: drop any search-card selection so the
+    // new anime takes over the modal instead of stacking behind it.
+    setSelectedAnime(null);
+    setHashLoading(true);
+    fetchAnimeById(id)
+      .then((res) => setHashAnime(res.data))
+      .catch(() => setHashAnime(null))
+      .finally(() => setHashLoading(false));
+  };
+
+  useEffect(() => {
+    readHash();
+    window.addEventListener('hashchange', readHash);
+    return () => window.removeEventListener('hashchange', readHash);
+  }, []);
+
+  const modalAnime = selectedAnime ?? hashAnime;
+  const modalOpened = selectedAnime !== null || hashAnime !== null || hashLoading;
+
+  const handleClose = () => {
+    if (selectedAnime) {
+      setSelectedAnime(null);
+      return;
+    }
+    if (window.location.hash) {
+      history.replaceState(null, '', window.location.pathname + window.location.search);
+    }
+    setHashAnime(null);
+  };
 
   let content: React.ReactNode;
 
@@ -87,9 +127,9 @@ export function AnimeGrid({ data, loading, error }: AnimeGridProps) {
     <>
       {content}
       <AnimeDetailModal
-        opened={selectedAnime !== null}
-        anime={selectedAnime}
-        onClose={() => setSelectedAnime(null)}
+        opened={modalOpened}
+        anime={modalAnime}
+        onClose={handleClose}
       />
     </>
   );
