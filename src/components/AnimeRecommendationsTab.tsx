@@ -75,7 +75,12 @@ export function AnimeRecommendationsTab({ animeId }: AnimeRecommendationsTabProp
       {recommendations.map((rec) => {
         const imageUrl = rec.entry.images.webp?.large_image_url || rec.entry.images.jpg.large_image_url;
         return (
-          <Card key={rec.entry.mal_id} padding={0} radius="md" withBorder style={{ cursor: 'pointer' }} onClick={() => { window.location.hash = String(rec.entry.mal_id); }}>
+          <Card key={rec.entry.mal_id} padding={0} radius="md" withBorder style={{ cursor: 'pointer' }} onClick={() => {
+  const url = new URL(window.location.href);
+  url.hash = String(rec.entry.mal_id);
+  window.history.pushState(null, '', url);
+  window.dispatchEvent(new HashChangeEvent('hashchange'));
+}}>
             <Card.Section>
               <AspectRatio ratio={3 / 4}>
                 <Image src={imageUrl} alt={rec.entry.title} />

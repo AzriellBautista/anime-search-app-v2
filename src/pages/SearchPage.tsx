@@ -36,6 +36,7 @@ export function SearchPage({ homeCount }: { homeCount: number }) {
   const { genres } = useGenreList();
   const [filtersOpened, setFiltersOpened] = useState(false);
   const [hashAnime, setHashAnime] = useState<Anime | null>(null);
+  const [selectedAnime, setSelectedAnime] = useState<Anime | null>(null);
   const [hashError, setHashError] = useState<string | null>(null);
   const [draftFilters, setDraftFilters] = useState<SearchParams>({});
   const [query, setQuery] = useState('');
@@ -142,6 +143,7 @@ export function SearchPage({ homeCount }: { homeCount: number }) {
   // Open anime detail modal from URL hash (#mal_id), works even on initial load
   useEffect(() => {
     const readHash = () => {
+      setSelectedAnime(null);
       const raw = window.location.hash.replace('#', '').trim();
       if (!raw) { setHashError(null); setHashAnime(null); return; }
       const id = Number(raw);
@@ -304,7 +306,7 @@ export function SearchPage({ homeCount }: { homeCount: number }) {
               {!isInitial && (
                 <>
                   <Box mt="md">
-                    <AnimeGrid data={data} loading={loading} error={error} />
+                    <AnimeGrid data={data} loading={loading} error={error} onSelectAnime={setSelectedAnime} />
                   </Box>
                   <PaginationBar pagination={pagination} onPageChange={setPage} />
                 </>
@@ -320,9 +322,10 @@ export function SearchPage({ homeCount }: { homeCount: number }) {
       )}
       <BackToTop />
       <AnimeDetailModal
-        opened={hashAnime !== null}
-        anime={hashAnime}
+        opened={selectedAnime !== null || hashAnime !== null}
+        anime={selectedAnime ?? hashAnime}
         onClose={() => {
+          if (selectedAnime) { setSelectedAnime(null); return; }
           if (window.location.hash) {
             history.replaceState(null, '', window.location.pathname + window.location.search);
           }

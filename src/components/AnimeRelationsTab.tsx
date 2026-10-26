@@ -98,7 +98,12 @@ export function AnimeRelationsTab({ animeId }: AnimeRelationsTabProps) {
                     type="button"
                     size="sm"
                     lineClamp={1}
-                    onClick={() => { window.location.hash = String(entry.mal_id); }}
+                    onClick={() => {
+  const url = new URL(window.location.href);
+  url.hash = String(entry.mal_id);
+  window.history.pushState(null, '', url);
+  window.dispatchEvent(new HashChangeEvent('hashchange'));
+}}
                   >
                     {entry.name}
                   </Anchor>
