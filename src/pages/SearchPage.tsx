@@ -118,8 +118,11 @@ export function SearchPage({ homeCount }: { homeCount: number }) {
     setDraftFilters(filterFields);
   }, [searchVersion, hasSearched]);
 
-  // Home button resets to initial state
+  // Home button resets to initial state (skip initial mount)
+  const prevHomeCount = useRef(homeCount);
   useEffect(() => {
+    if (prevHomeCount.current === homeCount) return;
+    prevHomeCount.current = homeCount;
     reset();
     setQuery('');
     setDraftFilters({});
