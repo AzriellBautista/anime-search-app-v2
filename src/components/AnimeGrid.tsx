@@ -15,15 +15,15 @@ function SkeletonCard() {
     <Card shadow="sm" padding="md" radius="md" withBorder>
       <Card.Section>
         <AspectRatio ratio={3 / 4}>
-          <Skeleton radius={0} />
+          <Skeleton height="100%" width="100%" radius={0} />
         </AspectRatio>
       </Card.Section>
       <Stack gap="xs" mt="md">
-        <Skeleton height={20} width="75%" />
+        <Skeleton height={40} width="75%" />
         <Group gap="xs">
-          <Skeleton height={20} width={48} radius="sm" />
-          <Skeleton height={20} width={36} radius="sm" />
-          <Skeleton height={20} width={56} radius="sm" />
+          <Skeleton height={18} width={48} radius="sm" />
+          <Skeleton height={18} width={36} radius="sm" />
+          <Skeleton height={18} width={56} radius="sm" />
         </Group>
         <Stack gap={4}>
           <Skeleton height={14} />
@@ -32,8 +32,8 @@ function SkeletonCard() {
           <Skeleton height={14} width="40%" />
         </Stack>
         <Group gap="xs">
-          <Skeleton height={20} width={60} radius="sm" />
-          <Skeleton height={14} width={50} />
+          <Skeleton height={18} width={118} radius="sm" />
+          <Skeleton height={17} width={50} />
         </Group>
       </Stack>
     </Card>

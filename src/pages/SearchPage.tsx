@@ -11,6 +11,8 @@ import {
   TextInput,
   Divider,
   Transition,
+  Alert,
+  Skeleton,
 } from '@mantine/core';
 import { IconFilter, IconSearch } from '@tabler/icons-react';
 import type { SearchParams, Anime } from '../types/anime';
@@ -20,7 +22,6 @@ import { useGenreList } from '../hooks/useGenreList';
 import { useSavedSearches } from '../hooks/useSavedSearches';
 import { SearchBar } from '../components/SearchBar';
 import { AdvancedFilters } from '../components/AdvancedFilters';
-import { Alert } from '@mantine/core';
 import { AnimeGrid } from '../components/AnimeGrid';
 import { AnimeDetailModal } from '../components/AnimeDetailModal';
 import { fetchAnimeById } from '../services/tenrai';
@@ -186,7 +187,7 @@ export function SearchPage({ homeCount }: { homeCount: number }) {
         overflow: 'auto',
       }}
     >
-      <Container size="xl" py={isInitial ? 0 : 'md'}>
+      <Container size="xl" py={isInitial ? 0 : 'md'} w="100%">
 
         <Stack align="center" gap="lg" style={{ width: '100%' }}>
           <Transition mounted={isInitial} transition="fade" duration={300} keepMounted>
@@ -291,7 +292,17 @@ export function SearchPage({ homeCount }: { homeCount: number }) {
                   />
                 )}
 
-                {!isInitial && hasSearched && !loading && !error && data.length > 0 && (
+                {!isInitial && hasSearched && loading ? (
+                  <Group justify="center" align="center" w="100%" gap={6}>
+                    <Skeleton height={20} width={120} radius="sm" />
+                    <Skeleton height={12} width={8} radius="sm" />
+                    <Group gap={4} wrap="nowrap">
+                      <Skeleton height={20} width={30} radius="sm" />
+                      <Skeleton height={28} width={55} radius="sm" />
+                      <Skeleton height={20} width={45} radius="sm" />
+                    </Group>
+                  </Group>
+                ) : !isInitial && hasSearched && !loading && !error && data.length > 0 && (
                   <Group justify="center" align="center" w="100%" gap={6}>
                     <Text size="sm">
                       Found {pagination?.items?.total ?? data.length} result{pagination?.items?.total !== 1 ? 's' : ''}

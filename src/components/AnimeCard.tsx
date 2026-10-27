@@ -21,13 +21,15 @@ export function AnimeCard({ anime, onClick }: AnimeCardProps) {
           <Image
             src={imageUrl}
             alt={anime.title}
+            fit="cover"
+            style={{ width: '100%', height: '100%' }}
             fallbackSrc="https://placehold.co/225x300/1a1a2e/eeeeee?text=No+Image"
           />
         </AspectRatio>
       </Card.Section>
 
       <Stack gap="xs" mt="md">
-        <Text fw={700} lineClamp={2} size="sm">
+        <Text fw={700} lineClamp={2} size="sm" style={{ minHeight: 40 }}>
           {anime.title_english || anime.title}
         </Text>
 
@@ -49,7 +51,7 @@ export function AnimeCard({ anime, onClick }: AnimeCardProps) {
           )}
         </Group>
 
-        <Text size="xs" c="dimmed" lineClamp={4}>
+        <Text size="xs" c="dimmed" lineClamp={4} style={{ minHeight: 68 }}>
           {truncatedSynopsis}
         </Text>
 
