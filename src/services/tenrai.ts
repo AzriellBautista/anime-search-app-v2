@@ -33,22 +33,47 @@ export async function fetchAnimeById(id: number): Promise<AnimeSingleResponse> {
   return res;
 }
 
+const charactersCache = new Map<number, AnimeCharactersResponse>();
 export async function fetchAnimeCharacters(id: number): Promise<AnimeCharactersResponse> {
-  return api.get(`anime/${id}/characters`).json<AnimeCharactersResponse>();
+  const cached = charactersCache.get(id);
+  if (cached) return cached;
+  const res = await api.get(`anime/${id}/characters`).json<AnimeCharactersResponse>();
+  charactersCache.set(id, res);
+  return res;
 }
 
+const picturesCache = new Map<number, AnimePicturesResponse>();
 export async function fetchAnimePictures(id: number): Promise<AnimePicturesResponse> {
-  return api.get(`anime/${id}/pictures`).json<AnimePicturesResponse>();
+  const cached = picturesCache.get(id);
+  if (cached) return cached;
+  const res = await api.get(`anime/${id}/pictures`).json<AnimePicturesResponse>();
+  picturesCache.set(id, res);
+  return res;
 }
 
+const statisticsCache = new Map<number, AnimeStatisticsResponse>();
 export async function fetchAnimeStatistics(id: number): Promise<AnimeStatisticsResponse> {
-  return api.get(`anime/${id}/statistics`).json<AnimeStatisticsResponse>();
+  const cached = statisticsCache.get(id);
+  if (cached) return cached;
+  const res = await api.get(`anime/${id}/statistics`).json<AnimeStatisticsResponse>();
+  statisticsCache.set(id, res);
+  return res;
 }
 
+const relationsCache = new Map<number, AnimeRelationsResponse>();
 export async function fetchAnimeRelations(id: number): Promise<AnimeRelationsResponse> {
-  return api.get(`anime/${id}/relations`).json<AnimeRelationsResponse>();
+  const cached = relationsCache.get(id);
+  if (cached) return cached;
+  const res = await api.get(`anime/${id}/relations`).json<AnimeRelationsResponse>();
+  relationsCache.set(id, res);
+  return res;
 }
 
+const recommendationsCache = new Map<number, AnimeRecommendationsResponse>();
 export async function fetchAnimeRecommendations(id: number): Promise<AnimeRecommendationsResponse> {
-  return api.get(`anime/${id}/recommendations`).json<AnimeRecommendationsResponse>();
+  const cached = recommendationsCache.get(id);
+  if (cached) return cached;
+  const res = await api.get(`anime/${id}/recommendations`).json<AnimeRecommendationsResponse>();
+  recommendationsCache.set(id, res);
+  return res;
 }
