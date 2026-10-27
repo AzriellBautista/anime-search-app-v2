@@ -144,6 +144,30 @@ export interface AnimeCharactersResponse {
   data: AnimeCharacter[];
 }
 
+export interface AnimeEpisode {
+  mal_id?: number;
+  url: string;
+  title: string;
+  title_japanese?: string;
+  title_romanji?: string;
+  duration?: number;
+  aired?: string;
+  score?: number | null;
+  filler?: boolean;
+  recap?: boolean;
+  synopsis?: string;
+  forum_url?: string;
+  replies?: number;
+  images?: {
+    jpg?: { image_url?: string };
+  };
+}
+
+export interface AnimeEpisodesResponse {
+  data: AnimeEpisode[];
+  pagination: Pagination;
+}
+
 export interface AnimePicturesResponse {
   data: AnimeImages[];
 }

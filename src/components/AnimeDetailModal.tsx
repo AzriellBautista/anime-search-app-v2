@@ -3,6 +3,7 @@ import { Modal, Image, Text, Badge, Group, Stack, Anchor, Grid, Divider, ScrollA
 import { IconLink } from '@tabler/icons-react';
 import type { Anime } from '../types/anime';
 import { AnimeCharactersTab } from './AnimeCharactersTab';
+import { AnimeEpisodesTab } from './AnimeEpisodesTab';
 import { AnimePicturesTab } from './AnimePicturesTab';
 import { AnimeStatisticsTab } from './AnimeStatisticsTab';
 import { AnimeRelationsTab } from './AnimeRelationsTab';
@@ -27,6 +28,7 @@ function airedLabel(aired: Anime['aired']): string {
 
 export function AnimeDetailModal({ opened, anime, onClose }: AnimeDetailModalProps) {
   const [charactersOpened, setCharactersOpened] = useState(false);
+  const [episodesOpened, setEpisodesOpened] = useState(false);
   const [picturesOpened, setPicturesOpened] = useState(false);
   const [statisticsOpened, setStatisticsOpened] = useState(false);
   const [relationsOpened, setRelationsOpened] = useState(false);
@@ -35,6 +37,7 @@ export function AnimeDetailModal({ opened, anime, onClose }: AnimeDetailModalPro
 
   useEffect(() => {
     setCharactersOpened(false);
+    setEpisodesOpened(false);
     setPicturesOpened(false);
     setStatisticsOpened(false);
     setRelationsOpened(false);
@@ -183,10 +186,11 @@ export function AnimeDetailModal({ opened, anime, onClose }: AnimeDetailModalPro
         </Grid.Col>
       </Grid>
 
-      <Tabs key={anime?.mal_id} defaultValue="details" onChange={(value) => { if (value === 'characters') setCharactersOpened(true); if (value === 'pictures') setPicturesOpened(true); if (value === 'statistics') setStatisticsOpened(true); if (value === 'relations') setRelationsOpened(true); if (value === 'recommendations') setRecommendationsOpened(true); }} px="md" pb="md">
+      <Tabs key={anime?.mal_id} defaultValue="details" onChange={(value) => { if (value === 'characters') setCharactersOpened(true); if (value === 'episodes') setEpisodesOpened(true); if (value === 'pictures') setPicturesOpened(true); if (value === 'statistics') setStatisticsOpened(true); if (value === 'relations') setRelationsOpened(true); if (value === 'recommendations') setRecommendationsOpened(true); }} px="md" pb="md">
         <Tabs.List>
           <Tabs.Tab value="details">Details</Tabs.Tab>
           <Tabs.Tab value="characters">Characters</Tabs.Tab>
+          <Tabs.Tab value="episodes">Episodes</Tabs.Tab>
           <Tabs.Tab value="pictures">Pictures</Tabs.Tab>
           <Tabs.Tab value="statistics">Statistics</Tabs.Tab>
           <Tabs.Tab value="relations">Relations</Tabs.Tab>
@@ -247,6 +251,10 @@ export function AnimeDetailModal({ opened, anime, onClose }: AnimeDetailModalPro
 
         <Tabs.Panel value="characters" pt="md">
           {charactersOpened && <AnimeCharactersTab animeId={anime.mal_id} />}
+        </Tabs.Panel>
+
+        <Tabs.Panel value="episodes" pt="md">
+          {episodesOpened && <AnimeEpisodesTab animeId={anime.mal_id} />}
         </Tabs.Panel>
 
         <Tabs.Panel value="pictures" pt="md">

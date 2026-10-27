@@ -1,5 +1,5 @@
 import ky from 'ky';
-import type { AnimeResponse, AnimeSingleResponse, GenreResponse, SearchParams, AnimeCharactersResponse, AnimePicturesResponse, AnimeStatisticsResponse, AnimeRelationsResponse, AnimeRecommendationsResponse } from '../types/anime';
+import type { AnimeResponse, AnimeSingleResponse, GenreResponse, SearchParams, AnimeCharactersResponse, AnimePicturesResponse, AnimeStatisticsResponse, AnimeRelationsResponse, AnimeRecommendationsResponse, AnimeEpisodesResponse } from '../types/anime';
 
 const API_BASE_URL = 'https://api.tenrai.org/v1';
 
@@ -30,6 +30,16 @@ export async function fetchAnimeById(id: number): Promise<AnimeSingleResponse> {
   if (cached) return cached;
   const res = await api.get(`anime/${id}`).json<AnimeSingleResponse>();
   animeByIdCache.set(id, res);
+  return res;
+}
+
+const episodesCache = new Map<string, AnimeEpisodesResponse>();
+export async function fetchAnimeEpisodes(id: number, page: number = 1): Promise<AnimeEpisodesResponse> {
+  const key = `${id}-${page}`;
+  const cached = episodesCache.get(key);
+  if (cached) return cached;
+  const res = await api.get(`anime/${id}/episodes`, { searchParams: { page } }).json<AnimeEpisodesResponse>();
+  episodesCache.set(key, res);
   return res;
 }
 
