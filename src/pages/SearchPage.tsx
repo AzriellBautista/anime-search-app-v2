@@ -309,7 +309,12 @@ export function SearchPage({ homeCount }: { homeCount: number }) {
               {!isInitial && (
                 <>
                   <Box mt="md">
-                    <AnimeGrid data={data} loading={loading} error={error} onSelectAnime={setSelectedAnime} />
+                    <AnimeGrid data={data} loading={loading} error={error} onSelectAnime={(anime) => {
+                    setSelectedAnime(anime);
+                    const url = new URL(window.location.href);
+                    url.hash = String(anime.mal_id);
+                    window.history.replaceState(null, '', url);
+                  }} />
                   </Box>
                   <PaginationBar pagination={pagination} onPageChange={setPage} />
                 </>
@@ -328,7 +333,13 @@ export function SearchPage({ homeCount }: { homeCount: number }) {
         opened={selectedAnime !== null || hashAnime !== null}
         anime={selectedAnime ?? hashAnime}
         onClose={() => {
-          if (selectedAnime) { setSelectedAnime(null); return; }
+          if (selectedAnime) {
+            setSelectedAnime(null);
+            if (window.location.hash) {
+              history.replaceState(null, '', window.location.pathname + window.location.search);
+            }
+            return;
+          }
           if (window.location.hash) {
             history.replaceState(null, '', window.location.pathname + window.location.search);
           }

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { Modal, Image, Text, Badge, Group, Stack, Anchor, Grid, Divider, ScrollArea, AspectRatio, Tabs } from '@mantine/core';
+import { Modal, Image, Text, Badge, Group, Stack, Anchor, Grid, Divider, ScrollArea, AspectRatio, Tabs, Button, Tooltip } from '@mantine/core';
+import { IconLink } from '@tabler/icons-react';
 import type { Anime } from '../types/anime';
 import { AnimeCharactersTab } from './AnimeCharactersTab';
 import { AnimePicturesTab } from './AnimePicturesTab';
@@ -30,6 +31,7 @@ export function AnimeDetailModal({ opened, anime, onClose }: AnimeDetailModalPro
   const [statisticsOpened, setStatisticsOpened] = useState(false);
   const [relationsOpened, setRelationsOpened] = useState(false);
   const [recommendationsOpened, setRecommendationsOpened] = useState(false);
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     setCharactersOpened(false);
@@ -40,6 +42,17 @@ export function AnimeDetailModal({ opened, anime, onClose }: AnimeDetailModalPro
   }, [anime?.mal_id]);
 
   if (!anime) return null;
+
+  const handleCopyLink = async () => {
+    try {
+      const shareUrl = `${window.location.origin}${window.location.pathname}#${anime.mal_id}`;
+      await navigator.clipboard.writeText(shareUrl);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      // ignore
+    }
+  };
 
   const imageUrl = anime.images?.webp?.large_image_url || anime.images?.jpg?.large_image_url;
   const hasTrailer = anime.trailer?.url;
@@ -59,6 +72,11 @@ export function AnimeDetailModal({ opened, anime, onClose }: AnimeDetailModalPro
             fit="cover"
           />
           <Text>{anime.title_english || anime.title}</Text>
+          <Tooltip label={copied ? 'Copied!' : 'Copy shareable link'}>
+            <Button size="xs" variant="subtle" leftSection={<IconLink size={14} />} onClick={handleCopyLink}>
+              {copied ? 'Copied' : 'Share'}
+            </Button>
+          </Tooltip>
         </Group>
       }
       size="calc(100vw - 2rem)"
